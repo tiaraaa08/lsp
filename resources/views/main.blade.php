@@ -209,64 +209,6 @@
     <script src="{{ asset('template/plugins/feather.min.js') }}"></script>
     <!-- Custom scripts -->
     <script src="{{ asset('template/js/script.js') }}"></script>
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                title: "Berhasil",
-                icon: "success",
-                text: "{{ session('success') }}"
-            })
-        </script>
-    @endif
-    @if ($errors->any())
-        <script>
-            Swal.fire({
-                icon: "warning",
-                title: "{{ $errors->first() }}",
-                showCancelButton: true
-            })
-        </script>
-    @endif
-    <script>
-        const hapus = document.querySelectorAll('.konfirmasiHapus');
-        hapus.forEach((form) => {
-            form.addEventListener('submit', function(e){
-                e.preventDefault();
-                Swal.fire({
-                    icon: "warning",
-                    title: "Apakan anda yakin?",
-                    text :"Data tidak akan bisa dipulihkan",
-                    showCancelButton : true,
-                    buttonCancelColor:"#3085d6",
-                    confirmButtonText: "Ya! Hapus"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            });
-        });
-
-        const Bayar = document.querySelectorAll('.konfirmasiBayar');
-        Bayar.forEach((form) => {
-            form.addEventListener('submit', function(e){
-                e.preventDefault();
-                Swal.fire({
-                    icon: "warning",
-                    title: "Apakan anda yakin?",
-                    text :"Pastikan selalu cek mutasi",
-                    showCancelButton : true,
-                    buttonCancelColor:"#3085d6",
-                    confirmButtonText: "Ya! Sudah"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
-            });
-        });
-    </script>
-    @stack('scripts')
 </body>
 
 </html>

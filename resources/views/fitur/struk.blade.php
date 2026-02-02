@@ -95,12 +95,7 @@
         </tr>
     </table>
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js.map') }}"></script>
-    <script>
-        window.print();
-        window.onafterprint= () => {
-            window.location.href = "{{ route('transaksi.index') }}";
-        }
-    </script>
+
 </body>
 
 </html>

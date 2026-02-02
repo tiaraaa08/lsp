@@ -99,14 +99,3 @@
     </div>
 @endsection
 
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#mainTable').DataTable({
-                language: {
-                    emptyTable: '<span class="text-danger">Data transaksi tidak tersedia</span>'
-                }
-            });
-        });
-    </script>
-@endpush
