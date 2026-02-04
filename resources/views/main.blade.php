@@ -49,27 +49,27 @@
                 <div class="sidebar-body">
                     <ul class="sidebar-body-menu">
                         <li>
-                            <a class="active" href="{{ route('dashboard') }}"><span class="icon home"
+                            <a class="{{ request()->routeIs('dashboard') ? 'active' : ''}}" href="{{ route('dashboard') }}"><span class="icon home"
                                     aria-hidden="true"></span>Dashboard</a>
                         </li>
                         <li>
-                            <a href="{{ route('layanan.index') }}">
+                            <a class="{{ request()->routeIs('layanan.*') ? 'active' : '' }}" href="{{ route('layanan.index') }}">
                                 <span class="icon folder" aria-hidden="true"></span>Layanan
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('pelanggan.index') }}">
+                            <a class="{{ request()->routeIs(patterns: 'pelanggan.*') ? 'active' : '' }}" href="{{ route('pelanggan.index') }}">
                                 <span class="icon user-3" aria-hidden="true"></span>Pelanggan
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('transaksi.index') }}">
+                            <a class="{{ request()->routeIs('transaksi.*') ? 'active' : '' }}" href="{{ route('transaksi.index') }}">
                                 <span class="icon message" aria-hidden="true"></span>
                                 Transaksi
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('laporan') }}">
+                            <a class="{{ request()->routeIs('laporan') ? 'active' : '' }}" href="{{ route('laporan') }}">
                                 <span class="icon message" aria-hidden="true"></span>
                                 Laporan
                             </a>
