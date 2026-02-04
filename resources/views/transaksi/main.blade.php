@@ -77,3 +77,101 @@
     @include('transaksi.tambah')
 @endsection
 
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#TransaksiTable').DataTable();
+        });
+
+        document.addEventListener('shown.bs.modal', function(e) {
+            const modal = e.target;
+            const harga = modal.querySelector('.Layanan');
+            const berat = modal.querySelector('.Berat');
+            const nominal = modal.querySelector('.Nominal');
+            const bayar = modal.querySelector('.JumlahBayar');
+            const pembayaran = modal.querySelector('.Pembayaran');
+            const kembalian = modal.querySelector('.Kembalian');
+            const simpan = modal.querySelector('.Simpan');
+
+            function formatRupiah(angka) {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(angka);
+            }
+
+            function number(val) {
+                return Number(val.replace(/\D/g, '')) || 0;
+            }
+
+            function hitung() {
+                const b = Number(berat.value) || 0;
+                const h = harga.selectedOptions[0]?.dataset.harga || 0;
+                const hasil = b * h;
+
+                nominal.value = hasil ? formatRupiah(hasil) : 0;
+                hitungKembalian();
+            }
+
+            function hitungKembalian() {
+                const TB = number(bayar.value) || 0;
+                const TN = number(nominal.value) || 0;
+                const kembali = TB - TN;
+
+                kembalian.innerText = formatRupiah(kembali > 0 ? kembali : 0);
+            }
+
+            function validasiBayar() {
+                const jumBay = number(bayar.value) || 0;
+                const jumTot = number(nominal.value) || 0;
+
+                if (pembayaran.value === 'Lunas') {
+                    simpan.disabled = jumBay > jumTot;
+                } else {
+                    simpan.value = disabled;
+                }
+            }
+
+            if (bayar.value) {
+                bayar.value = formatRupiah(number(bayar.value));
+            }
+
+            pembayaran.addEventListener('change', function() {
+                if (this.value === 'Belum Bayar') {
+                    bayar.value = formatRupiah(0);
+                    bayar.readOnly = true;
+                    kembalian.innerText = formatRupiah(0);
+                    simpan.disabled = false;
+                }
+                if (this.value === 'Lunas') {
+                    bayar.readOnly = false;
+                    validasiBayar();
+                    hitungKembalian();
+                }
+            })
+
+            bayar.addEventListener('input', function() {
+                this.value = formatRupiah(number(this.value));
+                hitungKembalian();
+                validasiBayar();
+            })
+
+            berat.addEventListener('input', () => {
+                if (this.value < 0) {
+                    this.value = 0;
+                }
+                hitung();
+                validasiBayar();
+            })
+
+            harga.addEventListener('change', () => {
+                hitung();
+                validasiBayar();
+            })
+
+            hitung();
+            validasiBayar();
+        })
+    </script>
+@endpush

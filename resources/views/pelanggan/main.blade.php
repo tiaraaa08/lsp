@@ -49,4 +49,10 @@
     </div>
     @include('pelanggan.tambah')
 @endsection
-
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#PelangganTable').DataTable();
+    })
+</script>
+@endpush

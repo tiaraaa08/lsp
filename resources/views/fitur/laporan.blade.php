@@ -54,3 +54,69 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#laporanTable').DataTable();
+        });
+
+        function filterTanggal() {
+            const mulai = document.querySelector('.hariMulai').value;
+            const akhir = document.querySelector('.hariAkhir').value;
+            const params = new URLSearchParams();
+
+            if (mulai) params.set('hariMulai', mulai);
+            if (akhir) params.set('hariAkhir', akhir);
+
+            const query = params.toString();
+            window.location.href = query ? `?${query}` : window.location.pathname;
+        }
+
+        function printTable() {
+            const print = document.getElementById('printTable');
+            const original = document.body.innerHTML;
+
+            const table = $('#laporanTable').DataTable();
+            table.destroy();
+
+            const mulai = document.querySelector('.hariMulai')?.value;
+            const akhir = document.querySelector('.hariAkhir')?.value;
+            const tanggal = 'Keseluruhan';
+
+            if (mulai && akhir) {
+                tanggal = `${formatTanggal(mulai)} - ${formatTanggal(akhir)}`;
+            } else if (mulai) {
+                tanggal = `mulai ${formatTanggal(mulai)}`;
+            } else if (akhir) {
+                tanggal = `sampai ${formatTanggal(akhir)}`;
+            }
+
+            const kopSurat = `
+                <div class="justify-content-center mb-5">
+                    <h3>Laporan Transaksi</h3>
+                    <h4>LSP</h4>
+                    <div class="justify-content-between d-flex mt-3">
+                        <div>Nama : Tiara</div>
+                        <div>Tanggal : ${tanggal}</div>
+                    </div>
+                    <hr>
+                <div>
+            `;
+
+            document.body.innerHTML = kopSurat + print.innerHTML;
+            window.print();
+            document.body.innerHTML = original;
+
+            location.reload();
+        }
+
+        function formatTanggal(tanggal) {
+            return new Intl.DateTimeFormat('id-ID', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            }).format(new Date(tanggal));
+        }
+    </script>
+@endpush

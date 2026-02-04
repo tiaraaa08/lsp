@@ -209,6 +209,70 @@
     <script src="{{ asset('template/plugins/feather.min.js') }}"></script>
     <!-- Custom scripts -->
     <script src="{{ asset('template/js/script.js') }}"></script>
+    @stack('scripts')
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}'
+            });
+        </script>
+    @endif
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'Gagal!',
+                text: '{{ $errors->first() }}'
+            })
+        </script>
+    @endif
+    <script>
+        const bayar = document.querySelectorAll('.konfirmasiBayar');
+        bayar.forEach((form)=> {
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Apakah anda yakin?',
+                    text: 'Pastikan cek mutasi!',
+                    showCancelButton : true,
+                    cancelButtonText: 'Batal',
+                    // showConfirmButton: true,
+                    confirmButtonText: 'Ya! Sudah',
+                    cancelButtonColor: '#d33',
+                    confirmButtonColor: '#3085d6',
+                }).then((result) => {
+                    if (result.isConfirmed){
+                        form.submit();
+                    }
+                })
+            })
+        })
+
+        const Hapus = document.querySelectorAll('.konfirmasiHapus');
+        Hapus.forEach((form)=> {
+            form.addEventListener('submit', function(e){
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Apakah anda yakin?',
+                    text: 'Data tidak akan bisa dipulihkan',
+                    showCancelButton : true,
+                    cancelButtonText: 'Batal',
+                    // showConfirmButton: true,
+                    confirmButtonText: 'Ya! Hapus',
+                    cancelButtonColor: '#d33',
+                    confirmButtonColor: '#3085d6',
+                }).then((result) => {
+                    if (result.isConfirmed){
+                        form.submit();
+                    }
+                })
+            })
+        })
+    </script>
 </body>
 
 </html>
