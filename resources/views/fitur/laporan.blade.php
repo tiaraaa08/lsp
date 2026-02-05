@@ -54,3 +54,67 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function filterTanggal() {
+
+            const mulai = document.querySelector('.hariMulai').value;
+            const akhir = document.querySelector('.hariAkhir').value;
+            const params = new URLSearchParams();
+
+            if (mulai) params.set('hariMulai', mulai);
+            if (akhir) params.set('hariAkhir', akhir);
+
+            const query = params.toString();
+            window.location.href = query ? `?${query}` : window.location.pathname;
+        }
+
+        function printTable() {
+            const print = document.getElementById('printTable');
+            const ori = document.body.innerHTML;
+
+            const table = $('#laporanTable').DataTable();
+            table.destroy();
+
+            const mulai = document.querySelector('.hariMulai')?.value;
+            const akhir = document.querySelector('.hariAkhir')?.value;
+            let tanggal = 'Keseluruhan';
+
+            if (mulai && akhir) {
+                tanggal = `${formatTanggal(mulai)} - ${formatTanggal(akhir)}`;
+
+            } else if (mulai) {
+                tanggal = `mulai ${formatTanggal(mulai)}`;
+            } else if (akhir) {
+                tanggal = `sampai ${formatTanggal(akhir)}`;
+            }
+
+            const kopSurat = `
+            <div style="text-align:center; margin-bottom:20px;">
+                    <h3>Laporan Transaksi</h3>
+                    <h4>Si-Launtor Tiara</h4>
+                    <div style="display:flex; justify-content:space-between; margin-top:10px">
+                        <div>Nama : Tiara</div>
+                        <div>Transaksi ${tanggal}</div>
+                    </div>
+                    <hr>
+                </div>
+            `;
+
+            document.body.innerHTML = kopSurat + print.innerHTML;
+            window.print();
+            document.body.innerHTML = ori;
+
+            window.reload()
+        }
+
+        function formatTanggal(tanggal) {
+            return new Intl.DateTimeFormat('id-ID', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            }).format(new Date(tanggal));
+        }
+    </script>
+@endpush

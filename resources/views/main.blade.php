@@ -209,6 +209,7 @@
     <script src="{{ asset('template/plugins/feather.min.js') }}"></script>
     <!-- Custom scripts -->
     <script src="{{ asset('template/js/script.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>

@@ -53,3 +53,31 @@
     </div>
     @include('layanan.tambah')
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('shown.bs.modal', function(e) {
+            const harga = e.target.querySelectorAll('.Harga');
+
+            harga.forEach((input) => {
+                const val = input.value.replace(/\D/g, '');
+                if (val !== 0) {
+                    input.value = new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(val);
+                }
+
+                input.addEventListener('input', function() {
+                    const mentah = this.value.replace(/\D/g, '');
+                    this.value = mentah ? new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(Number(mentah)) : '';
+                })
+            })
+        })
+    </script>
+@endpush
