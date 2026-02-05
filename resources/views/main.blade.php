@@ -209,6 +209,48 @@
     <script src="{{ asset('template/plugins/feather.min.js') }}"></script>
     <!-- Custom scripts -->
     <script src="{{ asset('template/js/script.js') }}"></script>
+    @stack('scripts')
+    <script>
+        const Hapus = document.querySelectorAll('.konfirmasiHapus');
+        Hapus.forEach((form) => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Apakah anda yakin?',
+                    text: 'Data tidak akan bisa dipulihkan',
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, Hapus!"
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        form.submit();
+                    }
+                })
+            })
+        })
+
+        const Bayar = document.querySelectorAll('.konfirmasiBayar');
+        Bayar.forEach((form) => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Apakah anda yakin?',
+                    text: 'Pastikan cek mutasi dahulu',
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Ya, Bayar!"
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        form.submit();
+                    }
+                })
+            })
+        })
+    </script>
 </body>
 
 </html>

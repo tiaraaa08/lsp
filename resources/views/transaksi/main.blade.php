@@ -77,3 +77,125 @@
     @include('transaksi.tambah')
 @endsection
 
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#TransaksiTable').DataTable();
+        })
+
+        document.addEventListener('shown.bs.modal', function(e) {
+            const modal = e.target;
+            const harga = modal.querySelector('.Layanan');
+            const berat = modal.querySelector('.Berat');
+            const nominal = modal.querySelector('.Nominal');
+            const bayar = modal.querySelector('.JumlahBayar');
+            const pembayaran = modal.querySelector('.Pembayaran');
+            const simpan = modal.querySelector('.Simpan');
+            const kembalian = modal.querySelector('.Kembalian');
+
+            function formatRupiah(angka) {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(angka);
+            }
+
+            function cleanNumber(val) {
+                return Number(val.replace(/\D/g, '')) || 0;
+            }
+
+            function hitung() {
+                const b = Number(berat.value) || 0;
+                const h = Number(harga.selectedOptions[0]?.dataset.harga) || 0;
+                const hasil = b * h;
+
+                nominal.value = hasil ? formatRupiah(hasil) : 0;
+                hitungKembalian();
+            }
+
+            function hitungKembalian() {
+                const HKb = cleanNumber(bayar.value) || 0;
+                const HKt = cleanNumber(nominal.value) || 0;
+                const kembali = HKb - HKt;
+
+                kembalian.innerText = formatRupiah(kembali > 0 ? kembali : 0);
+            }
+
+            function validasi() {
+                const Vb = cleanNumber(bayar.value) || 0;
+                const Vt = cleanNumber(nominal.value) || 0;
+
+                if (pembayaran.value === 'Lunas') {
+                    simpan.disabled = Vb < Vt;
+                } else {
+                    simpan.disabled = false;
+                }
+            }
+
+            if (bayar.value) {
+                bayar.value = formatRupiah(cleanNumber(bayar.value));
+            }
+
+            bayar.addEventListener('input', function() {
+                this.value = formatRupiah(cleanNumber(this.value));
+                hitungKembalian();
+                validasi();
+            })
+
+            pembayaran.addEventListener('change', function() {
+                if (pembayaran.value == 'Lunas') {
+                    bayar.readOnly = false;
+                    hitungKembalian();
+                    validasi();
+                }
+                if (pembayaran.value == 'Belum Bayar') {
+                    bayar.readOnly = true;
+                    bayar.value = formatRupiah(0);
+                    simpan.disabled = false;
+                    kembalian.innerText = formatRupiah(0);
+                }
+            })
+
+            berat.addEventListener('input', function(){
+                if(this.value < 0){
+                    this.value = 0;
+                }
+                hitung();
+                validasi();
+            })
+
+            harga.addEventListener('change', () => {
+                hitung();
+                validasi();
+            })
+
+            hitung();
+            validasi();
+        })
+        // document.addEventListener('shown.bs.modal', function(e) {
+        //     const harga = e.target.querySelectorAll('.JumlahBayar');
+
+        //     harga.forEach((input) => {
+        //         let mentah = input.value.replace(/\D/g, '');
+        //         if (mentah !== 0) {
+        //             input.value = new Intl.NumberFormat('id-ID', {
+        //                 style: 'currency',
+        //                 currency: 'IDR',
+        //                 minimumFractionDigits: 0
+        //             }).format(mentah);
+        //         }
+
+        //         input.addEventListener('input', function() {
+        //             let val = this.value.replace(/\D/g, '');
+        //             this.value = val ?
+        //                 new Intl.NumberFormat('id-ID', {
+        //                     style: 'currency',
+        //                     currency: 'IDR',
+        //                     minimumFractionDigits: 0
+        //                 }).format(val) : '';
+        //         })
+        //     })
+        // })
+    </script>
+@endpush
