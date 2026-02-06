@@ -30,7 +30,7 @@ class LayananController extends Controller
      */
     public function store(Request $request)
     {
-        $desk = array_map(array_filter('trim', explode($request->desk)));
+        $desk = array_filter(array_map('trim', explode(', ', $request->desk)));
         $harga = preg_replace('/\D/', '', $request->harga);
         Layanan::create([
             'nama' => $request->nama,
@@ -63,7 +63,7 @@ class LayananController extends Controller
     public function update(Request $request, $id)
     {
         $layanan = Layanan::find($id);
-        $desk = array_map(array_filter('trim', explode($request->desk)));
+        $desk = array_filter(array_map('trim', explode(', ', $request->desk)));
         $harga = preg_replace('/\D/', '', $request->harga);
         $layanan->update([
             'nama' => $request->nama,
@@ -81,7 +81,7 @@ class LayananController extends Controller
     {
         $layanan = Layanan::findOrFail($id);
         $layanan->delete();
-        
+
         return back()->with('success', 'Data layanan berhasil dihapus');
     }
 }
