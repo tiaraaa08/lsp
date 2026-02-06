@@ -9,11 +9,11 @@ class Transaksi extends Model
     protected $guarded = [];
     public $timestamps = false;
 
-    public function layanan() {
-        return $this->belongsTo(layanan::class, 'id_layanan');
+    public function layanan(){
+        return $this->belongsTo(Layanan::class, 'id_layanan');
     }
 
-    public function pelanggan() {
+    public function pelanggan(){
         return $this->belongsTo(Pelanggan::class, 'id_pelanggan');
     }
 }

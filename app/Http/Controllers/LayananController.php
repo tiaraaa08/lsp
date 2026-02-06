@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Layanan;
-use App\Models\Transaksi;
 use Illuminate\Http\Request;
 
 class LayananController extends Controller
@@ -15,7 +14,7 @@ class LayananController extends Controller
     {
         $layanan = Layanan::all();
 
-        return view('layanan.main', compact('layanan'));
+        return view('layanan.index', compact('layanan'));
     }
 
     /**
@@ -23,7 +22,7 @@ class LayananController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -31,21 +30,15 @@ class LayananController extends Controller
      */
     public function store(Request $request)
     {
-        $desk = array_filter(array_map('trim', explode(', ', $request->desk_layanan)));
-        $harga = preg_replace('/\D/', '', $request->harga_layanan);
-
-        $duplikat = Layanan::where('nama_layanan', $request->nama_layanan)->where('desk_layanan', $desk)->where('harga_layanan', $harga)->exists();
-        if($duplikat){
-            return redirect()->back()->withErrors(['error' => 'Data layanan telah tersedia']);
-        }
-
+        $desk = array_map(array_filter('trim', explode($request->desk)));
+        $harga = preg_replace('/\D/', '', $request->harga);
         Layanan::create([
-            'nama_layanan' => $request->nama_layanan,
-            'desk_layanan' => $desk,
-            'harga_layanan' => $harga
+            'nama' => $request->nama,
+            'desk' => $desk,
+            'harga' => $harga,
         ]);
 
-        return redirect()->back()->with('success', 'Data layanan berhasil ditambahkan');
+        return back()->with('success', 'Data layanan berhasil ditambahkan');
     }
 
     /**
@@ -59,6 +52,10 @@ class LayananController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    public function edit(Layanan $layanan)
+    {
+        //
+    }
 
     /**
      * Update the specified resource in storage.
@@ -66,25 +63,25 @@ class LayananController extends Controller
     public function update(Request $request, $id)
     {
         $layanan = Layanan::find($id);
-        $desk = array_filter(array_map('trim', explode(', ', $request->desk_layanan)));
-        $harga = preg_replace('/\D/', '', $request->harga_layanan);
+        $desk = array_map(array_filter('trim', explode($request->desk)));
+        $harga = preg_replace('/\D/', '', $request->harga);
         $layanan->update([
-            'nama_layanan' => $request->nama_layanan,
-            'desk_layanan' => $desk,
-            'harga_layanan' => $harga
+            'nama' => $request->nama,
+            'desk' => $desk,
+            'harga' => $harga,
         ]);
 
-        return redirect()->back()->with('success', 'Data layanan berhasil diperbarui');
+        return back()->with('success', 'Data layanan berhasil diperbarui');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy( $id)
     {
         $layanan = Layanan::findOrFail($id);
         $layanan->delete();
-
-        return redirect()->back()->with('success', 'Data layanan berhasil dihapus');
+        
+        return back()->with('success', 'Data layanan berhasil dihapus');
     }
 }

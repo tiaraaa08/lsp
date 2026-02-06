@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_layanan');
+            $table->date('tanggal');
             $table->integer('id_pelanggan');
+            $table->integer('id_layanan');
             $table->integer('berat');
-            $table->integer('jumlah_bayar');
-            $table->date('tanggal_transaksi');
+            $table->integer('bayar');
             $table->enum('keterangan', ['Proses', 'Selesai']);
             $table->enum('pembayaran', ['Belum Bayar', 'Lunas']);
         });

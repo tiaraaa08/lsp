@@ -14,7 +14,7 @@ class PelangganController extends Controller
     {
         $pelanggan = Pelanggan::all();
 
-        return view('pelanggan.main', compact('pelanggan'));
+        return view('pelanggan.index', compact('pelanggan'));
     }
 
     /**
@@ -30,18 +30,13 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
-        $duplikat = Pelanggan::where('no_hp', $request->no_hp)->exists();
-        if ($duplikat) {
-            return redirect()->back()->withErrors(['error', 'Silahkan coba dengan nomor hp berbeda']);
-        }
-
         Pelanggan::create([
-            'nama_pelanggan' => $request->nama_pelanggan,
-            'alamat_pelanggan' => $request->alamat_pelanggan,
-            'no_hp' => $request->no_hp
+            'nama' => $request->nama,
+            'no_hp' => $request->no_hp,
+            'alamat' => $request->alamat
         ]);
 
-        return redirect()->back()->with('success', 'Data pelanggan berhasil ditambahkan');
+        return back()->with('success', 'Data pelanggan berhasil ditambahkan');
     }
 
     /**
@@ -55,7 +50,7 @@ class PelangganController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Pelanggan $pelanggan)
+    public function edit(Pelanggan $id)
     {
         //
     }
@@ -66,29 +61,23 @@ class PelangganController extends Controller
     public function update(Request $request, $id)
     {
         $pelanggan = Pelanggan::find($id);
-
-        // $duplikat = Pelanggan::where('no_hp', $request->no_hp)->exists();
-        // if ($duplikat) {
-        //     return redirect()->back()->withErrors(['error', 'Silahkan coba dengan nomor hp berbeda']);
-        // }
-
         $pelanggan->update([
-            'nama_pelanggan' => $request->nama_pelanggan,
-            'alamat_pelanggan' => $request->alamat_pelanggan,
-            'no_hp' => $request->no_hp
+            'nama' => $request->nama,
+            'no_hp' => $request->no_hp,
+            'alamat' => $request->alamat
         ]);
 
-        return redirect()->back()->with('success', 'Data pelanggan berhasil diperbarui');
+        return back()->with('success', 'Data pelanggan berhasil diperbarui');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy( $id)
     {
-        $pelanggan = Pelanggan::find($id);
+        $pelanggan = Pelanggan::findOrFail($id);
         $pelanggan->delete();
-
-        return redirect()->back()->with('success', 'Data pelanggan berhasil dihapus');
+        
+        return back()->with('success', 'Data pelanggan berhasil dihapus');
     }
 }

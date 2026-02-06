@@ -14,8 +14,8 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        $pelanggan = Pelanggan::all();
         $layanan = Layanan::all();
+        $pelanggan = Pelanggan::all();
         $transaksi = Transaksi::all();
 
         return view('transaksi.main', compact('layanan', 'pelanggan', 'transaksi'));
@@ -34,18 +34,18 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        $bayar = preg_replace('/\D/', '', $request->jumlah_bayar);
+        $bayar = preg_replace('/\D/', '', $request->harga);
         Transaksi::create([
-            'tanggal_transaksi' => $request->tanggal_transaksi,
-            'id_pelanggan' => $request->id_pelanggan,
+            'tanggal' => $request->tanggal,
             'id_layanan' => $request->id_layanan,
+            'id_pelanggan' => $request->id_pelanggan,
             'berat' => $request->berat,
-            'jumlah_bayar' => $bayar,
-            'keterangan' => 'Proses',
-            'pembayaran' => $request->pembayaran
+            'bayar' => $bayar,
+            'pembayaran' => $request->pembayaran,
+            'keterangan' => $request->keterangan,
         ]);
 
-        return redirect()->back()->with('success', 'Data transaksi berhasil disimpan');
+        return back()->with('success', 'Data transaksi berhasil ditambahkan');
     }
 
     /**
@@ -59,32 +59,34 @@ class TransaksiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-
     public function bayar($id)
     {
-        $transaksi = Transaksi::find($id);
+        $transaksi = Transaksi::findOrFail($id);
         $transaksi->pembayaran = 'Lunas';
+        $transaksi->bayar = $transaksi->layanan->harga * $transaksi->berat;
         $transaksi->save();
-        return redirect()->back()->with('success', 'Data layanan berhasil diperbarui');
+
+        return back()->with('success', 'Pembayaran berhasil diselesaikan');
     }
+
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
     {
         $transaksi = Transaksi::find($id);
-        $bayar = preg_replace('/\D/', '', $request->jumlah_bayar);
+        $bayar = preg_replace('/\D/', '', $request->harga);
         $transaksi->update([
-            'tanggal_transaksi' => $request->tanggal_transaksi,
-            'id_pelanggan' => $request->id_pelanggan,
+            'tanggal' => $request->tanggal,
             'id_layanan' => $request->id_layanan,
+            'id_pelanggan' => $request->id_pelanggan,
             'berat' => $request->berat,
-            'jumlah_bayar' => $bayar,
-            'keterangan' => 'Proses',
-            'pembayaran' => $request->pembayaran
+            'bayar' => $bayar,
+            'pembayaran' => $request->pembayaran,
+            'keterangan' => $request->keterangan,
         ]);
 
-        return redirect()->back()->with('success', 'Data transaksi berhasil diperbarui');
+        return back()->with('success', 'Data transaksi berhasil ditambahkan');
     }
 
     /**
@@ -95,7 +97,6 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::findOrFail($id);
         $transaksi->delete();
 
-
-        return redirect()->back()->with('success', 'Data transaksi berhasil dihapus');
+        return back()->with('success', 'Data transaksi berhasil dihapu');
     }
 }

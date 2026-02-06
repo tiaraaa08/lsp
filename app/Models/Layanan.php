@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Layanan extends Model
 {
     protected $guarded = [];
-    protected $casts = [
-        'desk_layanan' => 'array',
-    ];
     public $timestamps = false;
+
+    protected $casts = [
+        'desk' => 'array',
+    ];
 }
