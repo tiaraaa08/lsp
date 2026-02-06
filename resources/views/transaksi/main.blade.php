@@ -39,8 +39,7 @@
                                 <td>
                                     @if ($t->pembayaran == 'Belum Bayar')
                                         <span class="text-danger">{{ $t->pembayaran }}</span>
-                                        <form action="{{ route('transaksi.bayar', $t->id) }}" method="POST"
-                                            class="konfirmasiBayar">
+                                        <form action="{{ route('transaksi.bayar', $t->id) }}" method="POST" class="konfirmasiBayar">
                                             @csrf
                                             <button type="submit" class="btn btn-danger">Bayar</button>
                                         </form>
@@ -52,8 +51,7 @@
                                 <td>
                                     <div class="d-flex gap-2">
                                         <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
-                                            data-bs-target="#editTransaksi{{ $t->id }}"><i
-                                                class="fa fa-pencil"></i></button>
+                                            data-bs-target="#editTransaksi{{ $t->id }}"><i class="fa fa-pencil"></i></button>
                                         <form action="{{ route('transaksi.destroy', $t->id) }}" method="POST"
                                             class="konfirmasiHapus">
                                             @csrf @method('DELETE')
@@ -76,3 +74,92 @@
     </div>
     @include('transaksi.tambah')
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('shown.bs.modal', function (e) {
+            const modal = e.target;
+            const harga = modal.querySelector('.Layanan');
+            const berat = modal.querySelector('.Berat');
+            const nominal = modal.querySelector('.Nominal');
+            const bayar = modal.querySelector('.JumlahBayar');
+            const pembayaran = modal.querySelector('.Pembayaran');
+            const kembalian = modal.querySelector('.Kembalian');
+            const simpan = modal.querySelector('.Simpan');
+
+            function rupiah(angka) {
+                return new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    minimumFractionDigits: 0
+                }).format(angka);
+            }
+
+            function clean(val) {
+                return Number(val.replace(/\D/g, '')) || 0;
+            }
+
+            function hitung() {
+                const b = Number(berat.value) || 0;
+                const h = Number(harga.selectedOptions[0]?.dataset.harga) || 0;
+                const hasil = b * h;
+
+                nominal.value = hasil ? rupiah(hasil) : 0;
+                hitungKembalian();
+            }
+
+            function hitungKembalian() {
+                const Hb = clean(bayar.value);
+                const Hn = clean(nominal.value);
+                const kembali = Hb - Hn;
+
+                kembalian.innerText = rupiah(kembali > 0 ? kembali : 0);
+            }
+
+            function validasi() {
+                const Vb = clean(bayar.value);
+                const Vn = clean(nominal.value);
+                if (pembayaran.value == 'Lunas') {
+                    simpan.disabled = Vn > Vb;
+                }
+            }
+
+            if (bayar.value) {
+                bayar.value = rupiah(clean(bayar.value));
+            }
+
+            harga.addEventListener('change', () => {
+                hitung();
+                validasi();
+            })
+
+            pembayaran.addEventListener('change', function () {
+                if (pembayaran.value == 'Belum Bayar') {
+                    bayar.readOnly = true;
+                    bayar.value = rupiah(0);
+                    kembalian.innerText = rupiah(0);
+                    simpan.disabled = false
+                }
+                if (pembayaran.value == 'Lunas') {
+                    bayar.readOnly = false;
+                    hitungKembalian();
+                    validasi();
+                }
+            })
+
+            bayar.addEventListener('input', function () {
+                this.value = rupiah(clean(this.value));
+                hitung();
+                validasi();
+            })
+
+            berat.addEventListener('input', () => {
+                hitung();
+                validasi();
+            })
+
+            hitung();
+            validasi();
+        })
+    </script>
+@endpush

@@ -40,10 +40,11 @@
                                     <div class="text-nowrap">{{ $t->pelanggan->no_hp }}</div>
                                 </td>
                                 <td>
-                                    <div class="text-nowrap">{{ $t->layanan->nama_layanan }} <div class="float-end">=> Rp
-                                            {{ number_format($t->layanan->harga_layanan) }}</div>
-                                    </div>
-                                    <div class="text-nowrap">{{ $t->berat }} KG</div>
+                                    <div class="text-nowrap">{{ $t->layanan->nama_layanan }}
+                                        <div class="float-end">=> Rp
+                                            {{ number_format($t->layanan->harga_layanan) }}
+                                        </div>
+                                        <div class="text-nowrap">{{ $t->berat }} KG</div>
                                 </td>
                                 <td>Rp {{ number_format($t->layanan->harga_layanan * $t->berat, 0, ',', '.') }}</td>
                             </tr>
@@ -54,3 +55,65 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        function filterTanggal() {
+            const mulai = document.querySelector('.hariMulai').value;
+            const akhir = document.querySelector('.hariAkhir').value;
+
+            const params = new URLSearchParams();
+
+            if (mulai) params.set('hariMulai', mulai);
+            if (akhir) params.set('hariAkhir', akhir);
+
+            const query = params.toString();
+            window.location.href = query ? `?${query}` : window.location.pathname;
+        }
+
+        function printTable() {
+            const print = document.getElementById('printTable');
+            const original = document.body.innerHTML;
+
+            const table = $('#TransaksiTable').DataTable();
+            table.destroy();
+
+            const mulai = document.querySelector('.hariMulai')?.value;
+            const akhir = document.querySelector('.hariAkhir')?.value;
+            let tanggal = 'Keseluruhan';
+            if (mulai && akhir) {
+                tanggal = `${formatTanggal(mulai)} - ${formatTanggal(akhir)}`;
+            } else if (mulai) {
+                tanggal = `mulai ${formatTanggal(mulai)}`;
+            } else if (akhir) {
+                tanggal = `sampai ${formatTanggal(akhir)}`;
+            }
+
+            const kopSurat = `
+                    <div style="text-align:center: margin-bottom:20px;>
+                        <h3>Laporan Transaksi</h3>
+                        <h4>Tiara</h4>
+                        <div style="display:flex: justify-content:space-between; margin-top:10px;>
+                            <div> Nama : Tiara</div
+                            <div> Tanggal : ${tanggal}</div>
+                        </div>
+                        <hr>
+                    </div>
+                `;
+
+            document.body.innerHTML = kopSurat + print.innerHTML;
+            window.print();
+            document.body.innerHTML = original;
+
+            window.reload();
+        }
+
+        function formatTanggal(tanggal) {
+            return new Intl.DateTimeFormat('id-ID', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            }).format(new Date(tanggal));
+        }
+    </script>
+@endpush

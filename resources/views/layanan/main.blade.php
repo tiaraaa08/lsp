@@ -5,8 +5,8 @@
         <div class="card-body">
             <div class="d-flex justify-content-between">
                 <div class="fs-4 fw-medium">Data Layanan</div>
-                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#tambahLayanan"><i
-                        class="fa fa-plus"></i></button>
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    data-bs-target="#tambahLayanan"><i class="fa fa-plus"></i></button>
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered" id="layananTable">
@@ -33,8 +33,7 @@
                                 <td>
                                     <div class="d-flex gap-2">
                                         <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                            data-bs-target="#editLayanan{{ $l->id }}"><i
-                                                class="fa fa-pencil"></i></button>
+                                            data-bs-target="#editLayanan{{ $l->id }}"><i class="fa fa-pencil"></i></button>
                                         <form action="{{ route('layanan.destroy', $l->id) }}" method="POST"
                                             class="konfirmasiHapus">
                                             @csrf @method('DELETE')
@@ -53,3 +52,32 @@
     </div>
     @include('layanan.tambah')
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('shown.bs.modal', function (e) {
+            const harga = e.target.querySelectorAll('.Harga');
+
+            harga.forEach((input) => {
+                let mentah = input.value.replace(/\D/g, '');
+
+                if (mentah !== 0) {
+                    input.value = new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(mentah)
+                }
+
+                input.addEventListener('input', function () {
+                    let val = this.value.replace(/\D/g, '');
+                    this.value = val ? new Intl.NumberFormat('id-ID', {
+                        style: 'currency',
+                        currency: 'IDR',
+                        minimumFractionDigits: 0
+                    }).format(val) : '';
+                })
+            })
+        })
+    </script>
+@endpush
