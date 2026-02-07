@@ -126,9 +126,15 @@
                 const vB = clean(bayar.value);
                 const vN = clean(nominal.value);
 
-                if (pembayaran.value == 'Lunas') {
+                if (pembayaran.value === 'Lunas') {
                     simpan.disabled = vB < vN;
+                } else {
+                    simpan.disabled = false;
                 }
+            }
+
+            if(bayar.value) {
+                bayar.value = rupiah(clean(bayar.value));
             }
 
             pembayaran.addEventListener('change', function() {
@@ -137,7 +143,7 @@
                     hitungKembalian();
                     validasi();
                 }
-                if (this.value == 'Belum Lunas') {
+                if (this.value == 'Belum Bayar') {
                     bayar.value = rupiah(0);
                     bayar.readOnly = true;
                     kembalian.innerText = rupiah(0);

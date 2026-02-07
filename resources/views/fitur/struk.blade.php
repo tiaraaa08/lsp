@@ -68,7 +68,8 @@
             <tr>
                 <td class="col-1">Harga per KG</td>
                 <td class="col-2">:</td>
-                <td class="col-3" class="float-end">Rp {{ number_format($transaksi->layanan->harga, 0, ',', '.') }}</td>
+                <td class="col-3" class="float-end">Rp {{ number_format($transaksi->layanan->harga, 0, ',', '.') }}
+                </td>
             </tr>
             <tr>
                 <td class="col-1">Berat</td>
@@ -81,32 +82,34 @@
             <tr>
                 <td class="col-1">Nominal</td>
                 <td class="col-2">:</td>
-                <td class="col-3" class="float-end">Rp {{ number_format($transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
+                <td class="col-3" class="float-end">Rp
+                    {{ number_format($transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
                 </td>
             </tr>
             <tr>
                 <td class="col-1">Bayar</td>
                 <td class="col-2">:</td>
-                <td class="col-3" class="float-end">Rp  {{ number_format($transaksi->bayar, 0, ',', '.') }}</td>
+                <td class="col-3" class="float-end">Rp {{ number_format($transaksi->bayar, 0, ',', '.') }}</td>
             </tr>
             <tr>
                 <td class="col-1">Kembalian</td>
                 <td class="col-2">:</td>
-                <td class="col-3"> Rp{{ number_format($transaksi->bayar - $transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
+                <td class="col-3">
+                    Rp{{ number_format($transaksi->bayar - $transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
                 </td>
             </tr>
         </table>
     </div>
-    {{-- <script src="{{ asset('jquery.js') }}"></script> --}}
+    <script src="{{ asset('jquery.js') }}"></script>
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script>
-          window.print();
-      //  window.onload = function({
-          //  window.print();
-            //window.onafterprint = () => {
-              //  window.location.href = '{{ route('transaksi.index') }}';
-   //         }
-     //   });
+        // window.print();
+        window.onload = function(){
+            window.print();
+            window.onafterprint = () =>{
+                window.location.href = "{{ route('transaksi.index') }}";
+            }
+        }
     </script>
 </body>
 
