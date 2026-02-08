@@ -42,16 +42,19 @@
         <div class="sidebar-body">
             <ul class="sidebar-body-menu">
                 <li>
-                    <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Beranda</a>
+                    <a class="{{request()->routeIs('dashboard.*') ? 'active' : ''}}" href="/"><span class="icon home" aria-hidden="true"></span>Beranda</a>
                 </li>
                 <li>
-                    <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Layanan</a>
+                    <a class="{{ request()->routeIs('layanan.*') ? 'active' : '' }}" href="{{ route('layanan.index') }}"><span class="icon home" aria-hidden="true"></span>Layanan</a>
                 </li>
                 <li>
-                    <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Pelanggan</a>
+                    <a class="{{request()->routeIs('pelanggan.*') ? 'active' : ''}}" href="{{ route('pelanggan.index') }}"><span class="icon home" aria-hidden="true"></span>Pelanggan</a>
                 </li>
                 <li>
-                    <a class="active" href="/"><span class="icon home" aria-hidden="true"></span>Transaksi</a>
+                    <a class="{{request()->routeIs('transaksi.*') ? 'active' : ''}}" href="{{ route('transaksi.index') }}"><span class="icon home" aria-hidden="true"></span>Transaksi</a>
+                </li>
+                <li>
+                    <a class="{{request()->routeIs('laporan.*') ? 'active' : ''}}" href="{{ route('laporan') }}"><span class="icon home" aria-hidden="true"></span>Laporan</a>
                 </li>
             </ul>
         </div>

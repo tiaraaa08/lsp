@@ -6,10 +6,9 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
-
-Route::get('/', function () {
-    return view('layanan.index');
-});
+Route::get('/', [FiturController::class, 'dashboard'])->name('dashboard');
+Route::get('/struk/{id}', [FiturController::class, 'struk'])->name('struk');
+Route::get('/laporan', [FiturController::class, 'laporan'])->name('laporan');
 
 Route::get('layanan', [LayananController::class, 'index'])->name('layanan.index');
 Route::post('layanan/store', [LayananController::class, 'store'])->name('layanan.store');
@@ -24,5 +23,6 @@ Route::delete('pelanggan/destroy/{id}', [PelangganController::class, 'destroy'])
 Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
 Route::post('transaksi/store', [TransaksiController::class, 'store'])->name('transaksi.store');
 Route::post('transaksi/update/{id}', [TransaksiController::class, 'update'])->name('transaksi.update');
+Route::post('transaksi/bayar/{id}', [TransaksiController::class, 'bayar'])->name('transaksi.bayar');
 Route::delete('transaksi/destroy/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
 

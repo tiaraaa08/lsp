@@ -21,7 +21,7 @@
                 height: 0;
             }
 
-            .table {
+            table {
                 width: 100%;
             }
 
@@ -41,72 +41,70 @@
 </head>
 
 <body>
-    <div class="text-center">
-        <h3>Bukti Pembayaran</h3>
-        <div class="divider"></div>
-        <h4>LSP TIARA</h4>
-        <div class="divider"></div>
-        <table>
-            <tr>
-                <td class="col-1">Tanggal</td>
-                <td class="col-2">:</td>
-                <td class="col-3">{{ $transaksi->tanggal }}</td>
-            </tr>
-            <tr>
-                <td class="col-1">Nama</td>
-                <td class="col-2" rowspan="2">:</td>
-                <td class="col-3">{{ $transaksi->pelanggan->nama }}</td>
-            </tr>
-        </table>
-        <div class="divider"></div>
-        <table>
-            <tr>
-                <td class="col-1">Layanan</td>
-                <td class="col-2">:</td>
-                <td class="col-3">{{ $transaksi->layanan->nama }}</td>
-            </tr>
-            <tr>
-                <td class="col-1">Harga per KG</td>
-                <td class="col-2">:</td>
-                <td class="col-3" class="float-end">Rp {{ number_format($transaksi->layanan->harga, 0, ',', '.') }}
-                </td>
-            </tr>
-            <tr>
-                <td class="col-1">Berat</td>
-                <td class="col-2" rowspan="2">:</td>
-                <td class="col-3">{{ $transaksi->berat }}</td>
-            </tr>
-        </table>
-        <div class="divider"></div>
-        <table>
-            <tr>
-                <td class="col-1">Nominal</td>
-                <td class="col-2">:</td>
-                <td class="col-3" class="float-end">Rp
-                    {{ number_format($transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
-                </td>
-            </tr>
-            <tr>
-                <td class="col-1">Bayar</td>
-                <td class="col-2">:</td>
-                <td class="col-3" class="float-end">Rp {{ number_format($transaksi->bayar, 0, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <td class="col-1">Kembalian</td>
-                <td class="col-2">:</td>
-                <td class="col-3">
-                    Rp{{ number_format($transaksi->bayar - $transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
-                </td>
-            </tr>
-        </table>
-    </div>
+    <h3>Bukti Pembayaran</h3>
+    <div class="divider"></div>
+    <h4>LSP TIARA</h4>
+    <div class="divider"></div>
+    <table>
+        <tr>
+            <td class="col-1">Tanggal</td>
+            <td class="col-2">:</td>
+            <td class="col-3">{{ $transaksi->tanggal }}</td>
+        </tr>
+        <tr>
+            <td class="col-1">Nama</td>
+            <td class="col-2" rowspan="2">:</td>
+            <td class="col-3">{{ $transaksi->pelanggan->nama }}</td>
+        </tr>
+    </table>
+    <div class="divider"></div>
+    <table>
+        <tr>
+            <td class="col-1">Layanan</td>
+            <td class="col-2">:</td>
+            <td class="col-3">{{ $transaksi->layanan->nama }}</td>
+        </tr>
+        <tr>
+            <td class="col-1">Harga per KG</td>
+            <td class="col-2">:</td>
+            <td class="col-3 float-end">Rp {{ number_format($transaksi->layanan->harga, 0, ',', '.') }}
+            </td>
+        </tr>
+        <tr>
+            <td class="col-1">Berat</td>
+            <td class="col-2" rowspan="2">:</td>
+            <td class="col-3">{{ $transaksi->berat }}</td>
+        </tr>
+    </table>
+    <div class="divider"></div>
+    <table>
+        <tr>
+            <td class="col-1">Nominal</td>
+            <td class="col-2">:</td>
+            <td class="col-3 float-end">Rp
+                {{ number_format($transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
+            </td>
+        </tr>
+        <tr>
+            <td class="col-1">Bayar</td>
+            <td class="col-2">:</td>
+            <td class="col-3 float-end">Rp {{ number_format($transaksi->bayar, 0, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td class="col-1">Kembalian</td>
+            <td class="col-2">:</td>
+            <td class="col-3">
+                Rp{{ number_format($transaksi->bayar - $transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
+            </td>
+        </tr>
+    </table>
     <script src="{{ asset('jquery.js') }}"></script>
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script>
         // window.print();
-        window.onload = function(){
+        window.onload = function() {
             window.print();
-            window.onafterprint = () =>{
+            window.onafterprint = () => {
                 window.location.href = "{{ route('transaksi.index') }}";
             }
         }
