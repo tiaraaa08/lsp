@@ -19,7 +19,7 @@
                     </div>
                     <div class="mb-2">
                          <label for="exampleInputPassword1" class="form-label">No HP</label>
-                            <input type="text" required class="form-control border " value="{{ $p->no_hp }}" name="no_hp" placeholder="Masukkan Harga Per KG" id="exampleInputPassword1">
+                            <input type="text" required class="form-control border noHP" oninput="this.value = this.value.replace(/\D/g, '')" value="{{ $p->no_hp }}" name="no_hp" placeholder="Masukkan Harga Per KG" id="exampleInputPassword1">
                     </div>
                 </div>
                 <div class="modal-footer">
