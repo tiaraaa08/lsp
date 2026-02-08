@@ -79,18 +79,14 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            $('#transaksiTable').DataTable();
-        })
-
         document.addEventListener('shown.bs.modal', function(e) {
             const modal = e.target;
             const harga = modal.querySelector('.Layanan');
             const berat = modal.querySelector('.Berat');
             const nominal = modal.querySelector('.Nominal');
             const bayar = modal.querySelector('.Bayar');
-            const pembayaran = modal.querySelector('.Pembayaran');
             const kembalian = modal.querySelector('.Kembalian');
+            const pembayaran = modal.querySelector('.Pembayaran');
             const simpan = modal.querySelector('.Simpan');
 
             function rupiah(angka) {
@@ -101,7 +97,7 @@
                 }).format(angka);
             }
 
-            function clean(val) {
+            function cleanNumber(val) {
                 return Number(val.replace(/\D/g, '')) || 0;
             }
 
@@ -115,26 +111,24 @@
             }
 
             function hitungKembalian() {
-                const hB = clean(bayar.value);
-                const hN = clean(nominal.value);
-                const kembali = hB - hN;
+                const kB = cleanNumber(bayar.value);
+                const kN = cleanNumber(nominal.value);
+                const kembali = kB - kN;
 
                 kembalian.innerText = rupiah(kembali > 0 ? kembali : 0);
             }
 
             function validasi() {
-                const vB = clean(bayar.value);
-                const vN = clean(nominal.value);
+                const vB = cleanNumber(bayar.value);
+                const vN = cleanNumber(nominal.value);
 
-                if (pembayaran.value === 'Lunas') {
-                    simpan.disabled = vB < vN;
-                } else {
-                    simpan.disabled = false;
+                if (pembayaran.value == 'Lunas') {
+                    simpan.disabled = vN > vB;
                 }
             }
 
-            if(bayar.value) {
-                bayar.value = rupiah(clean(bayar.value));
+            if(bayar.value){
+                bayar.value = rupiah(cleanNumber(bayar.value));
             }
 
             pembayaran.addEventListener('change', function() {
@@ -143,26 +137,29 @@
                     hitungKembalian();
                     validasi();
                 }
-                if (this.value == 'Belum Bayar') {
+                if(this.value == 'Belum Bayar'){
+                    bayar.readOnly= true;
                     bayar.value = rupiah(0);
-                    bayar.readOnly = true;
                     kembalian.innerText = rupiah(0);
                     simpan.disabled = false;
                 }
             })
 
             bayar.addEventListener('input', function() {
-                this.value = rupiah(clean(this.value));
-                hitungKembalian();
-                validasi();
-            })
-
-            harga.addEventListener('change', () => {
+                this.value = rupiah(cleanNumber(this.value));
                 hitung();
                 validasi();
             })
 
-            berat.addEventListener('input', () => {
+            berat.addEventListener('input', function() {
+                if (this.value < 0) {
+                    this.value = 0
+                }
+                hitung();
+                validasi();
+            })
+
+            harga.addEventListener('change', ()=>{
                 hitung();
                 validasi();
             })

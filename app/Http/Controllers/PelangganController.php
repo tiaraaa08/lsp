@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 
 class PelangganController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $pelanggan = Pelanggan::all();
@@ -17,67 +14,43 @@ class PelangganController extends Controller
         return view('pelanggan.index', compact('pelanggan'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        $duplikat = Pelanggan::where('no_hp', $request->no_hp)->where('nama', $request->nama)->exists();
+        if ($duplikat) {
+            return back()->withErrors(['error', 'Coba dengan no HP berbeda']);
+        }
+
         Pelanggan::create([
             'nama' => $request->nama,
-            'no_hp' => $request->no_hp,
-            'alamat' => $request->alamat
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp
         ]);
 
         return back()->with('success', 'Data pelanggan berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Pelanggan $pelanggan)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Pelanggan $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $pelanggan = Pelanggan::find($id);
+        // $pelanggan->no_hp;
+        // if ($request->no_hp == $pelanggan->no_hp && $request->nama == $pelanggan->nama) {
+        //     return back()->withErrors(['error', 'Coba dengan no HP berbeda']);
+        // }
+
         $pelanggan->update([
             'nama' => $request->nama,
-            'no_hp' => $request->no_hp,
-            'alamat' => $request->alamat
+            'alamat' => $request->alamat,
+            'no_hp' => $request->no_hp
         ]);
 
         return back()->with('success', 'Data pelanggan berhasil diperbarui');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy( $id)
-    {
-        $pelanggan = Pelanggan::findOrFail($id);
+    public function destroy($id){
+        $pelanggan = Pelanggan::find($id);
         $pelanggan->delete();
-        
+
         return back()->with('success', 'Data pelanggan berhasil dihapus');
     }
 }

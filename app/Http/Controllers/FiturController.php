@@ -11,34 +11,38 @@ class FiturController extends Controller
 {
     public function dashboard()
     {
+        $layanan = Layanan::count();
+        $pelanggan = Pelanggan::count();
+        $transaksi = Transaksi::latest('tanggal')->paginate(5);
+        $selesai = Transaksi::where('keterangan', 'Selesai')->where('pembayaran', 'Lunas')->count();
 
-        $transaksi = Transaksi::all();
-        $pelanggan = Pelanggan::all();
-        $layanan = Layanan::all();
-
-        return view('fitur.dashboard', compact('transaksi', 'pelanggan', 'layanan'));
+        return view('fitur.dashboard', compact('layanan', 'pelanggan', 'transaksi', 'selesai'));
     }
 
     public function laporan(Request $request)
     {
-        $query = Transaksi::query();
+        $query = Transaksi::query()
+            ->where('keterangan', 'Selesai')
+            ->where('pembayaran', 'Lunas');
 
         if ($request->hariMulai && !$request->hariAkhir) {
             $query->whereDate('tanggal', '>=', $request->hariMulai);
         } elseif (!$request->hariMulai && $request->hariAkhir) {
             $query->whereDate('tanggal', '<=', $request->hariAkhir);
-        } elseif($request->hariMulai && $request->hariAkhir) {
+        } elseif ($request->hariMulai && $request->hariAkhir) {
             $query->whereBetween('tanggal', [
                 $request->hariMulai,
-                $request->hariAkhir,
+                $request->hariAkhir
             ]);
         }
-        $transaksi= $query->get();
+
+        $transaksi = $query->get();
 
         return view('fitur.laporan', compact('transaksi'));
     }
 
-    public function struk($id){
+    public function struk($id)
+    {
         $transaksi = Transaksi::find($id);
 
         return view('fitur.struk', compact('transaksi'));

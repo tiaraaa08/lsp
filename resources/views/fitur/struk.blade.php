@@ -41,9 +41,9 @@
 </head>
 
 <body>
-    <h3>Bukti Pembayaran</h3>
+    <h3 class="text-center">Bukti Pembayaran</h3>
     <div class="divider"></div>
-    <h4>LSP TIARA</h4>
+    <h4 class="text-center">LSP TIARA</h4>
     <div class="divider"></div>
     <table>
         <tr>
@@ -67,7 +67,8 @@
         <tr>
             <td class="col-1">Harga per KG</td>
             <td class="col-2">:</td>
-            <td class="col-3 float-end">Rp {{ number_format($transaksi->layanan->harga, 0, ',', '.') }}
+            <td class="col-3"> Rp <span class="float-end">
+                    {{ number_format($transaksi->layanan->harga, 0, ',', '.') }}</span>
             </td>
         </tr>
         <tr>
@@ -81,14 +82,16 @@
         <tr>
             <td class="col-1">Nominal</td>
             <td class="col-2">:</td>
-            <td class="col-3 float-end">Rp
-                {{ number_format($transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
+            <td class="col-3"> Rp <span
+                    class="float-end">{{ number_format($transaksi->layanan->harga * $transaksi->berat, 0, ',', '.') }}
+                </span>
             </td>
         </tr>
         <tr>
             <td class="col-1">Bayar</td>
             <td class="col-2">:</td>
-            <td class="col-3 float-end">Rp {{ number_format($transaksi->bayar, 0, ',', '.') }}</td>
+            <td class="col-3"> Rp <span class="float-end"> {{ number_format($transaksi->bayar, 0, ',', '.') }}</span>
+            </td>
         </tr>
         <tr>
             <td class="col-1">Kembalian</td>

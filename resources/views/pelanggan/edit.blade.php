@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Layanan</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Pelanggan</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form class="form p-1" action="{{route('pelanggan.update', $p->id)}}" method="POST">
@@ -10,15 +10,15 @@
                 @method('POST')
                 <div class="modal-body">
                     <div class="mb-2">
-                         <label for="exampleInputPassword1" class="form-label">Nama Layanan</label>
+                         <label for="exampleInputPassword1" class="form-label">Nama Pelanggan</label>
                             <input type="text" required name="nama" value="{{ $p->nama }}" class="form-control border" placeholder="Masukkan Nama Layanan" id="exampleInputPassword1">
                     </div>
                     <div class="mb-2">
-                         <label for="exampleInputPassword1" class="form-label">Deskripsi Layanan (pisahkan dengan koma)</label>
+                         <label for="exampleInputPassword1" class="form-label">Alamat</label>
                          <textarea name="alamat" required id="" cols="15" rows="5" class="form-control">{{ $p->alamat }}</textarea>
                     </div>
                     <div class="mb-2">
-                         <label for="exampleInputPassword1" class="form-label">Harga Per KG</label>
+                         <label for="exampleInputPassword1" class="form-label">No HP</label>
                             <input type="text" required class="form-control border " value="{{ $p->no_hp }}" name="no_hp" placeholder="Masukkan Harga Per KG" id="exampleInputPassword1">
                     </div>
                 </div>

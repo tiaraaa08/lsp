@@ -1,75 +1,41 @@
 @extends('main')
 @section('title', 'Dashboard')
 @section('content')
-<div class="row">
-    <div class="col-md-6 col-xl-3">
-        <article class="stat-cards-item">
-            <div class="stat-cards-icon primary">
-                <i data-feather="bar-chart-2" aria-hidden="true"></i>
-            </div>
-            <div class="stat-cards-info">
-                <p class="stat-cards-info__num">1478 286</p>
-                <p class="stat-cards-info__title">Total visits</p>
-                <p class="stat-cards-info__progress">
-                    <span class="stat-cards-info__profit success">
-                        <i data-feather="trending-up" aria-hidden="true"></i>4.07%
-                    </span>
-                    Last month
-                </p>
-            </div>
-        </article>
+    <div class="row mb-4">
+        <div class="col-md-4 col-xl-4">
+            <article class="stat-cards-item">
+                <div class="stat-cards-icon primary">
+                    <i data-feather="bar-chart-2" aria-hidden="true"></i>
+                </div>
+                <div class="stat-cards-info">
+                    <p class="stat-cards-info__num">{{ $layanan }}</p>
+                    <p class="stat-cards-info__title">Jumlah Layanan</p>
+                </div>
+            </article>
+        </div>
+        <div class="col-md-4 col-xl-4">
+            <article class="stat-cards-item">
+                <div class="stat-cards-icon warning">
+                    <i data-feather="file" aria-hidden="true"></i>
+                </div>
+                <div class="stat-cards-info">
+                    <p class="stat-cards-info__num">{{ $pelanggan }}</p>
+                    <p class="stat-cards-info__title">Jumlah Pelanggan</p>
+                </div>
+            </article>
+        </div>
+        <div class="col-md-4 col-xl-4">
+            <article class="stat-cards-item">
+                <div class="stat-cards-icon purple">
+                    <i data-feather="file" aria-hidden="true"></i>
+                </div>
+                <div class="stat-cards-info">
+                    <p class="stat-cards-info__num">{{ $selesai }}</p>
+                    <p class="stat-cards-info__title">Transaksi Selesai</p>
+                </div>
+            </article>
+        </div>
     </div>
-    <div class="col-md-6 col-xl-3">
-        <article class="stat-cards-item">
-            <div class="stat-cards-icon warning">
-                <i data-feather="file" aria-hidden="true"></i>
-            </div>
-            <div class="stat-cards-info">
-                <p class="stat-cards-info__num">1478 286</p>
-                <p class="stat-cards-info__title">Total visits</p>
-                <p class="stat-cards-info__progress">
-                    <span class="stat-cards-info__profit success">
-                        <i data-feather="trending-up" aria-hidden="true"></i>0.24%
-                    </span>
-                    Last month
-                </p>
-            </div>
-        </article>
-    </div>
-    <div class="col-md-6 col-xl-3">
-        <article class="stat-cards-item">
-            <div class="stat-cards-icon purple">
-                <i data-feather="file" aria-hidden="true"></i>
-            </div>
-            <div class="stat-cards-info">
-                <p class="stat-cards-info__num">1478 286</p>
-                <p class="stat-cards-info__title">Total visits</p>
-                <p class="stat-cards-info__progress">
-                    <span class="stat-cards-info__profit danger">
-                        <i data-feather="trending-down" aria-hidden="true"></i>1.64%
-                    </span>
-                    Last month
-                </p>
-            </div>
-        </article>
-    </div>
-    <div class="col-md-6 col-xl-3">
-        <article class="stat-cards-item">
-            <div class="stat-cards-icon success">
-                <i data-feather="feather" aria-hidden="true"></i>
-            </div>
-            <div class="stat-cards-info">
-                <p class="stat-cards-info__num">1478 286</p>
-                <p class="stat-cards-info__title">Total visits</p>
-                <p class="stat-cards-info__progress">
-                    <span class="stat-cards-info__profit warning">
-                        <i data-feather="trending-up" aria-hidden="true"></i>0.00%
-                    </span>
-                    Last month
-                </p>
-            </div>
-        </article>
-    </div></div>
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -97,21 +63,23 @@
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-between">
-                                      <div>
-                                          <div class="text-nowrap">{{ $t->layanan->nama }}</div>
-                                        <div class="text-nowrap">Rp{{ number_format($t->layanan->harga) }}</div>
-                                      </div>
-                                      {{ $t->berat }}KG
+                                        <div>
+                                            <div class="text-nowrap">{{ $t->layanan->nama }}</div>
+                                            <div class="text-nowrap">Rp{{ number_format($t->layanan->harga) }}</div>
+                                        </div>
+                                        {{ $t->berat }}KG
                                     </div>
                                 </td>
-                                <td> @if ($t->pembayaran == 'Belum Bayar')
+                                <td>
+                                    @if ($t->pembayaran == 'Belum Bayar')
                                         <div class="text-danger">{{ $t->pembayaran }}</div>
                                         </form>
                                     @else
                                         <div class="text-success">{{ $t->pembayaran }}</div>
-                                    @endif</td>
+                                    @endif
+                                </td>
                                 <td>
-                                   {{$t->keterangan}}
+                                    {{ $t->keterangan }}
                                 </td>
                             </tr>
                         @endforeach
